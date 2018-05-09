@@ -17,17 +17,18 @@ export default function dedent(
       .replace(/\\`/g, "`");
 
     if (i < values.length) {
+      let value_str: string = String(values[i]);
       // Over-indent multiline interpolations so they don't 'fall' to 0
-      if (values[i].includes('\n')) {
+      if (value_str.includes('\n')) {
         const spaces_before_match = result.match(/(?:^|\n)( *)$/);
-        if (spaces_before_match && typeof values[i] === 'string') {
+        if (spaces_before_match && typeof value_str === 'string') {
           const spaces_before = spaces_before_match[1];
-          result += values[i]
+          result += value_str
             .split('\n')
             .map((str, i) => i === 0 ? str : `${spaces_before}${str}`)
             .join('\n');
         } else {
-          result += values[i];
+          result += value_str;
         }
       } else {
         result += values[i];

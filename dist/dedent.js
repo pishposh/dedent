@@ -10,11 +10,6 @@ function dedent(strings) {
 
   // first, perform interpolation
   var result = "";
-
-  for (var _len = arguments.length, values = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    values[_key - 1] = arguments[_key];
-  }
-
   for (var i = 0; i < raw.length; i++) {
     result += raw[i]
     // join lines when there is a suppressed newline
@@ -22,22 +17,23 @@ function dedent(strings) {
     // handle escaped backticks
     .replace(/\\`/g, "`");
 
-    if (i < values.length) {
+    if (i < (arguments.length <= 1 ? 0 : arguments.length - 1)) {
+      var value_str = String(arguments.length <= i + 1 ? undefined : arguments[i + 1]);
       // Over-indent multiline interpolations so they don't 'fall' to 0
-      if (values[i].includes('\n')) {
+      if (value_str.includes('\n')) {
         var spaces_before_match = result.match(/(?:^|\n)( *)$/);
-        if (spaces_before_match && typeof values[i] === 'string') {
+        if (spaces_before_match && typeof value_str === 'string') {
           (function () {
             var spaces_before = spaces_before_match[1];
-            result += values[i].split('\n').map(function (str, i) {
+            result += value_str.split('\n').map(function (str, i) {
               return i === 0 ? str : "" + spaces_before + str;
             }).join('\n');
           })();
         } else {
-          result += values[i];
+          result += value_str;
         }
       } else {
-        result += values[i];
+        result += arguments.length <= i + 1 ? undefined : arguments[i + 1];
       }
     }
   }
