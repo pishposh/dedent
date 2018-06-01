@@ -21,7 +21,7 @@ function dedent(strings) {
       var value_str = String(arguments.length <= i + 1 ? undefined : arguments[i + 1]);
       // Over-indent multiline interpolations so they don't 'fall' to 0
       if (value_str.includes('\n')) {
-        var spaces_before_match = result.match(/(?:^|\n)( *)$/);
+        var spaces_before_match = result.match(/(?:^|\n)([ \t]*).*$/);
         if (spaces_before_match && typeof value_str === 'string') {
           (function () {
             var spaces_before = spaces_before_match[1];
@@ -41,11 +41,14 @@ function dedent(strings) {
   // now strip indentation
   var lines = result.split("\n");
   var mindent = null;
-  lines.forEach(function (l) {
-    var m = l.match(/^(\s+)\S+/);
+  lines.forEach(function (l, index) {
+    if (!index) {
+      return;
+    }
+    var m = l.match(/^(\s*)\S+/);
     if (m) {
       var indent = m[1].length;
-      if (!mindent) {
+      if (mindent == null) {
         // this is the first indented line
         mindent = indent;
       } else {
