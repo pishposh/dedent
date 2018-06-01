@@ -128,4 +128,31 @@ describe("dedent", () => {
       </p>\n
     `).toMatchSnapshot();
   });
+
+  it("handles zero indent", () => {
+    expect(dd`
+First line
+  Second line
+    `).toMatchSnapshot();
+  });
+
+  it("ignores first line indent", () => {
+    expect(dd`{
+  int a;
+  int b;
+}`).toMatchSnapshot();
+  });
+
+  it("another nested text", () => {
+    const decl = dd`{
+  int a;
+  int b;
+}`;
+    expect(dd`{
+  int a;
+  struct ${decl} foo;
+  int b;
+}`).toMatchSnapshot();
+  });
+
 });

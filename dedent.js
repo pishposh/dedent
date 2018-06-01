@@ -20,7 +20,7 @@ export default function dedent(
       let value_str: string = String(values[i]);
       // Over-indent multiline interpolations so they don't 'fall' to 0
       if (value_str.includes('\n')) {
-        const spaces_before_match = result.match(/(?:^|\n)( *)$/);
+        const spaces_before_match = result.match(/(?:^|\n)([ \t]*).*$/);
         if (spaces_before_match && typeof value_str === 'string') {
           const spaces_before = spaces_before_match[1];
           result += value_str
@@ -39,11 +39,14 @@ export default function dedent(
   // now strip indentation
   const lines = result.split("\n");
   let mindent: number | null = null;
-  lines.forEach(l => {
-    let m = l.match(/^(\s+)\S+/);
+  lines.forEach((l, index) => {
+    if (!index) {
+      return;
+    }
+    let m = l.match(/^(\s*)\S+/);
     if (m) {
       let indent = m[1].length;
-      if (!mindent) {
+      if (mindent == null) {
         // this is the first indented line
         mindent = indent;
       } else {

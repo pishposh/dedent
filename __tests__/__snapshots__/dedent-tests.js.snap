@@ -1,3 +1,14 @@
+exports[`dedent another nested text 1`] = `
+"{
+  int a;
+  struct {
+    int a;
+    int b;
+  } foo;
+  int b;
+}"
+`;
+
 exports[`dedent can be used as a function 1`] = `"A test argument."`;
 
 exports[`dedent doesn't strip exlicit newlines 1`] = `
@@ -13,6 +24,18 @@ exports[`dedent doesn't strip exlicit newlines with mindent 1`] = `
 `;
 
 exports[`dedent escapes backticks 1`] = `"\`"`;
+
+exports[`dedent handles zero indent 1`] = `
+"First line
+  Second line"
+`;
+
+exports[`dedent ignores first line indent 1`] = `
+"{
+  int a;
+  int b;
+}"
+`;
 
 exports[`dedent single line input works with single line and closing backtick on newline 1`] = `"A single line of input."`;
 
